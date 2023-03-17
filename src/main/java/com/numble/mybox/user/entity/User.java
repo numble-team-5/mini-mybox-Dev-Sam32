@@ -4,17 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.numble.mybox.folder.entity.Folder;
 import com.numble.mybox.storage.entity.Storage;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity @Table(name = "USER")
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
-    @JsonIgnore
     @Id @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -27,19 +25,17 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-//    @JoinColumn(name = "folder_id")
     private List<Folder> folders = new ArrayList<>();
 
-    public void addFolder(Folder folder) {
-        folders.add(folder);
-    }
-
-    @OneToOne(mappedBy = "user")
-//    @JoinColumn(name = "storage_id")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Storage storage;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public void addFolder(Folder folder) {
+        folders.add(folder);
     }
 }

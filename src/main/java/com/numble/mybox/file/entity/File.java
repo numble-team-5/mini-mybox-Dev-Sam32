@@ -1,19 +1,15 @@
 package com.numble.mybox.file.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.numble.mybox.folder.entity.Folder;
-import com.numble.mybox.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity @Table(name = "FILE")
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class File {
-    @JsonIgnore
-    @Id
-    @Column(name = "file_id", nullable = false)
+    @Id @Column(name = "file_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
 
@@ -27,16 +23,16 @@ public class File {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id")
     private Folder folder;
-
-    public void addFolder(Folder folder) {
-        this.folder = folder;
-    }
 
     public File(String fileName, Long fileSize) {
         this.fileName = fileName;
         this.fileSize = fileSize;
+    }
+
+    public void addFolder(Folder folder) {
+        this.folder = folder;
     }
 }

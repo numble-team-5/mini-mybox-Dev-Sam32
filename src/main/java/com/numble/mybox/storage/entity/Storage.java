@@ -1,22 +1,19 @@
 package com.numble.mybox.storage.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.numble.mybox.user.entity.User;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "STORAGE")
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Storage {
-    @JsonIgnore
-    @Id
-    @Column(name = "storage_id", nullable = false)
+    @Id @Column(name = "storage_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storageId;
 
@@ -28,7 +25,12 @@ public class Storage {
     @ColumnDefault("0")
     private Long usedStorageSize;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Storage(Long totStorageSize, Long usedStorageSize) {
+        this.totStorageSize = totStorageSize;
+        this.usedStorageSize = usedStorageSize;
+    }
 }
