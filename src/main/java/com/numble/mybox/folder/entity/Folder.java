@@ -27,7 +27,6 @@ public class Folder {
     private User user;
 
     @OneToMany(mappedBy = "folder")
-//    @JoinColumn(name = "file_id")
     private List<File> files = new ArrayList<>();
 
     public Folder(String folderName) {

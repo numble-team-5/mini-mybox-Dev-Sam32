@@ -19,7 +19,6 @@ public class File {
     @Column(name = "file_size", nullable = false)
     private Long fileSize;
 
-
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
